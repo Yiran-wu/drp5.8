@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+	<property>
+		<name>mapreduce.framework.name</name>
+		<value>yarn</value>
+		<description> The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn. </description>
+	</property>
+	    
+	<property>
+	    <name>mapreduce.cluster.temp.dir</name>
+	    <value>/data/hadoop2data/mr_temp</value>
+	    <final>true</final>
+	    <description> A shared directory for temporary files. </description>
+	</property>
+	  
+	<property>
+	    <name>mapreduce.cluster.local.dir</name>
+	    <value>/data/hadoop2data/mr_local</value>
+	    <final>true</final>
+	    <description> The local directory where MapReduce stores intermediate data files.
+	       May be a comma-separated list of directories on different devices in order to spread disk i/o.
+	       Directories that do not exist are ignored. 
+	    </description>
+	</property>
+	  
+    <property>
+		<name>mapreduce.jobhistory.address</name>
+		<value>localhost:10020</value>
+		<description> MapReduce JobHistory Server IPC host:port </description>
+	</property>
+	    
+	<property>
+		 <name>mapreduce.jobhistory.webapp.address</name>
+		 <value>localhost:19888</value>
+		 <description> MapReduce JobHistory Server Web UI host:port </description>
+	</property>
+
+	<property>
+		<name>mapreduce.task.timeout</name>
+		<value>600000000</value>
+		 <description> The number of milliseconds before a task will be terminated if it neither
+		   reads an input, writes an output, nor updates its status string. A value of 0 disables the timeout.
+		 </description>
+	</property>
+	
+	<property>
+    	<name>mapreduce.map.java.opts</name>
+    	<value>-Xmx1536m</value>
+    	 <description> set a larger heap size of the JVM for Maps of the child</description>
+    </property>
+  
+   <property>
+       <name>mapreduce.reduce.java.opts</name>  
+       <value>-Xmx1536m</value>
+        <description> set a larger heap size of the JVM for Reduces of the child </description>
+   </property>
+  
+    <property>
+        <name>mapreduce.cluster.acls.enabled</name>  
+        <value>true</value>  
+         <description> Specifies whether ACLs should be checked for authorization of users for doing various
+           queue and job level operations. ACLs are disabled by default. If enabled, access control checks are made by
+           JobTracker and TaskTracker when requests are made by users for queue operations like submit job to a queue
+           and kill a job in the queue and job operations like viewing the job-details (See mapreduce.job.acl-view-job)
+           or for modifying the job (See mapreduce.job.acl-modify-job) using Map/Reduce APIs, RPCs or via the console
+           and web user interfaces. For enabling this flag(mapreduce.cluster.acls.enabled), this is to be set to true
+           in mapred-site.xml on JobTracker node and on all TaskTracker nodes.
+         </description>               
+   </property>
+  
+   <property>
+       <name>mapreduce.job.counters.limit</name>
+       <value>2400</value>                        
+       <description>limit on counters,default value 120</description>
+   </property>
+  
+   <property>
+       <name>mapreduce.job.userlog.retain.hours</name> 
+       <value>192</value>   
+        <description> The maximum time, in hours, for which the user-logs are to be retained after the job completion. </description>                  
+   </property>
+  
+   <property>
+       <name>mapreduce.task.io.sort.mb</name>   
+       <value>500</value>         
+       <description>default 100M, buffer big then 100M, will write to disk,reduce disk io</description>
+   </property>
+  
+   <property>
+       <name>io.sort.record.percent</name>
+       <value>0.5</value>
+       <description>default0.8, buffer reach 80%, will write to disk; reduce disk io</description>
+   </property>
+  
+   <property>
+       <name>mapreduce.reduce.speculative</name> 
+       <value>false</value>                                  
+       <description>for big data and disk is less, shut down this can save io operation</description>
+   </property>
+  
+   <property>
+       <name>mapreduce.map.speculative</name> 
+       <value>false</value>                             
+       <description>for big data and disk is less, shut down this can save io operation</description>
+   </property>
+  
+   <property>
+       <name>mapreduce.tasktracker.local.dir.minspacestart</name>  
+       <value>10737418240</value>                  
+       <description>Byte,if lower than this space, will find other nodes to run</description>
+   </property>
+  
+   <property>
+       <name>mapreduce.tasktracker.local.dir.minspacekill</name>  
+       <value>8589934592</value>                   
+       <description>Byte,if lower than this space, will kill some tasks to release space</description>
+   </property>
+  
+   <property>
+       <name>mapreduce.map.cpu.vcores</name>
+       <value>2</value>
+        <description> The number of virtual cores to request from the scheduler for each map task. </description>
+   </property>
+
+   <property>
+       <name>mapreduce.reduce.cpu.vcores</name>
+       <value>2</value>
+        <description> The number of virtual cores to request from the scheduler for each reduce task. </description>
+   </property>
+
+   
+   <property>
+       <name>mapreduce.map.memory.mb</name>
+       <value>2048</value>
+        <description> The amount of memory to request from the scheduler for each map task. </description>
+   </property>
+
+   <property>
+       <name>mapreduce.reduce.memory.mb</name>
+       <value>2048</value>
+        <description> The amount of memory to request from the scheduler for each reduce task. </description>
+   </property>
+ <!--
+  <property>
+   	<name>mapreduce.job.log4j-properties-file</name>
+   	<value>pi-container-log4j.properties</value>
+  </property> 
+ 
+
+
+   <property>
+   	   <name>mapred.jobtracker.taskScheduler.pai.max.maptask</name>
+       <value>true</value>
+   </property>
+  
+   <property>
+       <name>mapred.jobtracker.taskScheduler.pai.max.maptask.percent</name>
+       <value>1</value>
+   </property>
+-->
+	
+   <property>
+       <name>mapreduce.tasktracker.http.threads</name>
+       <value>64</value>
+        <description>The number of worker threads that for the http server. This is used for map output fetching</description>
+   </property>
+   
+   <property>
+       <name>yarn.app.mapreduce.am.job.task.listener.thread-count</name>
+       <value>64</value>
+        <description>The number of threads used to handle RPC calls in the MR AppMaster from remote tasks</description>
+   </property>
+   
+	<property>
+       <name>mapreduce.jobtracker.handler.count</name>
+       <value>30</value>
+        <description>The number of server threads for the JobTracker. This should be roughly 4% of the number of tasktracker nodes.</description>
+   </property>
+	
+	
+	<property>
+		<name>yarn.app.mapreduce.am.job.reduce.preemption.limit</name>
+		<value>0.5</value>
+		<description>Limit on the number of reducers that can be preempted to ensure that at
+     least one map task can run if it needs to. Percentage between 0.0 and 1.0, default 0.5</description>
+	</property>
+	
+	<property>
+		<name>yarn.app.mapreduce.am.job.reduce.rampup.limit</name>
+		<value>0.3</value>
+		<description> Limit reduces starting until a certain percentage of maps have finished.
+   	 Percentage between 0.0 and 1.0, default 0.5 </description>
+	</property>
+	
+	<property>
+		<name>mapreduce.job.reduce.slowstart.completedmaps</name>
+		<value>0.5</value>
+		<description>Fraction of the number of maps in the job which should be complete before reduces are scheduled for the job. default 0.05</description>
+	</property>
+	
+	<property>
+        <name>mapreduce.jobtracker.tasktracker.maxblacklists</name>
+        <value>0</value>
+        <description>The number of blacklists for a taskTracker by various jobs
+               after which the task tracker could be blacklisted across
+               all jobs. The tracker will be given a tasks later
+               (after a day). The tracker will become a healthy
+               tracker after a restart.
+        </description>
+    </property> 
+    
+    
+    <property>
+            <name>yarn.app.mapreduce.am.command-opts</name>
+            <value>-Xmx2048m</value>
+            <description>Java opts for the MR App Master processes. The following symbol, if present, will be interpolated: @taskid@ is replaced by current TaskID. 
+            Any other occurrences of '@' will go unchanged. For example, to enable verbose gc logging to a file named for the taskid in /tmp and to set the heap maximum to be a gigabyte,
+             pass a 'value' of: -Xmx1024m -verbose:gc -Xloggc:/tmp/@taskid@.gc Usage of -Djava.library.path can cause programs to no longer function if hadoop native libraries are used. 
+             These values should instead be set as part of LD_LIBRARY_PATH in the map / reduce JVM env using the mapreduce.map.env and mapreduce.reduce.env config settings.
+             </description>.
+    </property>
+        
+     <property>
+       <name>yarn.app.mapreduce.am.resource.mb</name>
+       <value>1536</value>
+        <description>The amount of memory the MR AppMaster needs.</description>
+    </property>
+</configuration>

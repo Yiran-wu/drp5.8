@@ -1,0 +1,291 @@
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<configuration>
+
+<!-- Site specific YARN configuration properties -->
+    <property>
+		<name>yarn.resourcemanager.hostname</name>
+        <value>localhost</value>
+         <description> The hostname of the RM. </description>
+    </property>
+   
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle,spark_shuffle</value>
+        <description> A comma separated list of services where service name should only contain
+         a-zA-Z0-9_ and can not start with numbers</description>
+    </property>
+    <property>
+       <name>yarn.nodemanager.aux-services.spark_shuffle.class</name>
+       <value>org.apache.spark.network.yarn.YarnShuffleService</value>
+    </property>    
+    <property>
+        <name>yarn.log.dir</name>
+        <value>/data/hadoop2data/yarn-log</value>
+        <description>yarn.log.dir</description>
+    </property>
+    
+     <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/data/hadoop2data/nm_local_log</value>
+        <description> List of directories to store localized files in.
+         An application's localized file directory will be found
+          in: ${yarn.nodemanager.local-dirs}/usercache/${user}/appcache/application_${appid}. 
+          Individual containers' work directories, called container_${contid}, 
+          will be subdirectories of this.
+        </description>
+     </property>
+       
+	<property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>true</value>
+        <description> Whether to enable log aggregation. Log aggregation collects each container's
+         logs and moves these logs onto a file-system, for e.g. HDFS, after the application completes.
+          Users can configure the "yarn.nodemanager.remote-app-log-dir" and "yarn.nodemanager.remote-app-log-dir-suffix"
+           properties to determine where these logs are moved to. 
+           Users can access the logs via the Application Timeline Server.
+        </description>
+    </property>
+       
+    <property>
+        <name>yarn.nodemanager.vmem-pmem-ratio</name>
+        <value>2.0</value>
+        <description> Ratio between virtual memory to physical memory when setting memory limits for containers. 
+        Container allocations are expressed in terms of physical memory, and virtual memory usage is allowed to
+         exceed this allocation by this ratio.
+         </description>
+    </property>
+     
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>2048</value>
+        <description> The minimum allocation for every container request at the RM, in MBs. 
+           Memory requests lower than this will throw a InvalidResourceRequestException.
+        </description>
+    </property>
+    
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>4096</value>
+        <description> The maximum allocation for every container request at the RM, in MBs. 
+           Memory requests higher than this will throw a InvalidResourceRequestException.
+        </description>
+    </property>
+
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>4</value>
+        <description> The maximum allocation for every container request at the RM,
+            in terms of virtual CPU cores. Requests higher than this will throw a
+            InvalidResourceRequestException. 
+        </description>
+    </property>
+    
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>2</value>
+        <description> The minimum allocation for every container request at the RM, 
+       		 in terms of virtual CPU cores. Requests lower than this will throw a 
+       		 InvalidResourceRequestException. 
+        </description>
+    </property>
+    
+	<property>
+     	<name>yarn.nodemanager.resource.cpu-vcores</name>
+		<value>4</value>
+		<description> Number of vcores that can be allocated for containers. 
+			This is used by the RM scheduler when allocating resources for containers. 
+			This is not used to limit the number of physical cores used by YARN containers. 
+		</description>
+    </property>
+    
+  	<property>
+     	<name>yarn.nodemanager.delete.debug-delay-sec</name>
+		<value>1200</value>
+		<description> Number of seconds after an application finishes before the nodemanager's
+		 DeletionService will delete the application's localized file directory and
+		  log directory. To diagnose Yarn application problems, set this property's
+		   value large enough (for example, to 600 = 10 minutes) to permit examination of
+		    these directories. After changing the property's value, you must restart
+		     the nodemanager in order for it to have an effect. The roots of 
+		     Yarn applications' work directories is configurable with the yarn.nodemanager.
+		     local-dirs property (see below), and the roots of the Yarn applications' log directories is
+		      configurable with the yarn.nodemanager.log-dirs property (see also below). </description>
+    </property>  
+    
+    <property>
+       <name>yarn.app.end-notification.url</name>
+       <value>http://localhost:8080/rest/manager/job/update/$AppId/$AppStatus</value>
+       <description> yarn inform httpserver to update job status by url.</description>
+    </property>
+   
+    <property>
+       <name>yarn.app.end-notification.retry.attempts</name>
+       <value>1</value>
+       <description> times of yarn retrying if failed to inform httpServer to update job status.</description>
+    </property>
+     
+    <property>
+       <name>yarn.app.end-notification.max.attempts</name>
+       <value>2</value>
+       <description> max times of yarn trying to inform httpServer to update job stauts by url.</description>
+    </property>
+    
+   <property>
+      <name>yarn.resourcemanager.scheduler.monitor.enable</name>
+      <value>true</value>
+      <description> Enable a set of periodic monitors (specified in yarn.resourcemanager.scheduler.monitor.policies) that affect the scheduler. </description>
+   </property>
+ <!--   
+   <property>
+    <name>yarn.resourcemanager.scheduler.class</name>
+    <value>cn.wisenergy.pai.hadoop.plugin.scheduler.capacity.CapacityScheduler</value>
+    <description>The class to use as the resource scheduler </description>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.scheduler.monitor.policies</name>
+    <value>cn.wisenergy.pai.hadoop.plugin.monitor.capacity.ProportionalCapacityPreemptionPolicy</value>
+    <description>The list of SchedulingEditPolicy classes that interact with the scheduler. A particular module may be incompatible with the scheduler, other policies, or a configuration of either.</description>
+  </property> -->
+  
+   <property>
+      <name>yarn.resourcemanager.monitor.capacity.preemption.max_wait_before_kill</name>
+      <value>60000</value>
+      <description> Time in milliseconds between requesting a preemption from an application
+    		 and killing the container.
+     </description>
+    </property>
+  
+    <property>
+      <name>yarn.resourcemanager.monitor.capacity.preemption.total_preemption_per_round</name>
+      <value>1</value>
+      <description>Maximum percentage of resources preempted in a single round. By
+       controlling this value one can throttle the pace at which containers are
+       reclaimed from the cluster. After computing the total desired preemption,
+       the policy scales it back within this limit.</description>
+    </property>
+  
+    <property>
+      <name>yarn.resourcemanager.monitor.capacity.preemption.natural_termination_factor</name>
+      <value>1</value>
+      <description>Given a computed preemption target, account for containers naturally 
+      expiring and preempt only this percentage of the delta. This determines
+      the rate of geometric convergence into the deadzone ({@link
+      #MAX_IGNORED_OVER_CAPACITY}). For example, a termination factor of 0.5
+      will reclaim almost 95% of resources within 5 * {@link
+      #WAIT_TIME_BEFORE_KILL}, even absent natural termination.</description>
+   </property>
+    
+    
+    
+<!--
+    <property>
+     	<name>yarn.nodemanager.resource.memory-mb</name>
+		<value>8192</value>
+    </property>
+-->
+
+  <property>
+        <name>yarn.nodemanager.disk-health-checker.min-healthy-disks</name>
+        <value>0.05</value>
+        <description>The minimum fraction of number of disks to be healthy for the nodemanager to launch new containers. 
+        This correspond to both yarn-nodemanager.local-dirs and yarn.nodemanager.log-dirs. i.e. 
+        If there are less number of healthy local-dirs (or log-dirs) available, 
+        then new containers will not be launched on this node.</description>
+  </property>
+  
+  <property>
+        <name>yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage</name>
+        <value>95</value>
+        <description>The maximum percentage of disk space utilization allowed after which a disk is marked as bad.
+         Values can range from 0.0 to 100.0. If the value is greater than or equal to 100, 
+         the nodemanager will check for full disk. This applies to yarn-nodemanager.local-dirs
+          and yarn.nodemanager.log-dirs.
+        </description>
+  </property>
+  
+  <property>
+        <name>yarn.nodemanager.disk-health-checker.min-free-space-per-disk-mb</name>
+        <value>10240</value>
+        <description>
+        	The minimum space that must be available on a disk for it to be used.
+        	 This applies to yarn-nodemanager.local-dirs and yarn.nodemanager.log-dirs.
+        </description>
+  </property>
+  
+   <property>
+        <name>yarn.resourcemanager.resource-tracker.client.thread-count</name>
+        <value>64</value>
+        <description>
+        	Number of threads to handle resource tracker calls.
+        </description>
+  </property>
+  
+  <property>
+        <name>yarn.nodemanager.container-manager.thread-count</name>
+        <value>32</value>
+        <description>
+        	Number of threads container manager uses.
+        </description>
+  </property>
+  
+  <property>
+        <name>yarn.nodemanager.localizer.client.thread-count</name>
+        <value>10</value>
+        <description>
+        	Number of threads to handle localization requests.
+        </description>
+  </property>
+  
+  <property>
+        <name>yarn.nodemanager.localizer.fetch.thread-count</name>
+        <value>10</value>
+        <description>
+        	Number of threads to use for localization fetching.
+        </description>
+  </property>
+  
+   <property>
+       <name>pai.local.tmp.dir</name>
+       <value>/tmp</value>
+       <description> Temporary space directory for PAI,using for temporary space manager and monitor. </description>
+    </property>
+    
+     <property>
+        <name>pai.monitor.node.resource.interval-ms</name>
+        <value>3000</value>
+        <description> Interval in milliseconds for collecting node resource service thread. </description>
+    </property>
+    
+    <property>
+       <name>pai.plugin.service.class</name>
+       <value>cn.wisenergy.pai.hadoop.plugin.service.ServicePluginManager</value>
+       <description>Hadoop plugin service class for PAI. </description>
+    </property>
+    
+    <property>
+       <name>hadoop-dbservice-class</name>
+       <value>cn.wisenergy.pai.manager.db.process.HadoopDBService</value>
+       <description> Database Service for Hadoop </description>
+    </property>
+    
+    <property>
+       <name>hadoop.plugin.server.addr</name>
+       <value>localhost:9001</value>
+       <description> Hadoop plugin server address </description>
+    </property>
+  
+  
+</configuration>
